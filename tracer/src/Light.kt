@@ -1,0 +1,1 @@
+data class Light(val position: Point, val colour: Colour, val intensity: Float)
