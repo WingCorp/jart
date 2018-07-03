@@ -38,6 +38,10 @@ class Colour(r: Float, g: Float, b: Float) {
         return (r.shl(16)) + gb
     }
 
+    operator fun times(i: Float): Colour {
+        return Colour(r*i, g*i, b*i)
+    }
+
     companion object {
 
         fun decodeGamma(r: Float, g: Float, b: Float): Triple<Float, Float, Float> {
