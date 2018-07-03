@@ -13,8 +13,8 @@ class Sphere(val center: Point, val radius: Float) : Shape {
 
     override fun intersect(ray: Ray): Hit? {
         val a = (ray.direction.x * ray.direction.x) + (ray.direction.y * ray.direction.y) + (ray.direction.z * ray.direction.z)
-        val b = 2.0f * (ray.point.x * ray.direction.x + ray.point.y * ray.direction.y + ray.point.z * ray.direction.z)
-        val c = (ray.point.x * ray.point.x) + (ray.point.y * ray.point.y) + (ray.point.z * ray.point.z) - (radius * radius)
+        val b = 2.0f * (ray.origin.x * ray.direction.x + ray.origin.y * ray.direction.y + ray.origin.z * ray.direction.z)
+        val c = (ray.origin.x * ray.origin.x) + (ray.origin.y * ray.origin.y) + (ray.origin.z * ray.origin.z) - (radius * radius)
         val d = (b * b) - (4 * a * c)
 
         return when {

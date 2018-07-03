@@ -1,6 +1,7 @@
-interface Shape{
+abstract class Shape(val boundingBox: BoundingBox) {
 
-    fun intersect(ray: Ray): Hit?
-    fun boundingBox()
-    fun inside(point: Point)
+    abstract fun intersect(ray: Ray): Hit?
+
+    abstract fun inside(point: Point)
+
 }

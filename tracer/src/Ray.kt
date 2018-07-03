@@ -1,3 +1,3 @@
-data class Ray(val point: Point, val direction: Vector) {
+data class Ray(val origin: Point, val direction: Vector) {
 
 }
