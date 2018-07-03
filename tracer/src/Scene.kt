@@ -1,1 +1,1 @@
-data class Scene(val shapes: List<Shape>, lights: List<>)
+data class Scene(val shapes: List<Shape>)
