@@ -1,7 +1,7 @@
 import kotlin.math.min
 
 class Sphere(val center: Point, val radius: Float) : Shape {
-
+    
     private fun getCorrectSolution(t1: Float, t2: Float): Float? {
         return when {
             t1 > 0.0 && t2 < 0.0 -> t1
@@ -29,8 +29,8 @@ class Sphere(val center: Point, val radius: Float) : Shape {
                 }
             }
             else -> {
-                val t1 = (-b + (Math.sqrt(d.toDouble())).toFloat()) / (2.0f * a)
-                val t2 = (-b - (Math.sqrt(d.toDouble())).toFloat()) / (2.0f * a)
+                val t1 = (-b + Maths.sqrt(d)) / (2.0f * a)
+                val t2 = (-b - Maths.sqrt(d)) / (2.0f * a)
 
                 val t = getCorrectSolution(t1,t2)
 
@@ -42,6 +42,13 @@ class Sphere(val center: Point, val radius: Float) : Shape {
                 }
             }
         }
+    }
+
+    fun getLow(){
+        val p = Point((0.0f - radius) + Maths.e(), (0.0f))
+    }
+    override fun boundingBox() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun inside(point: Point){
