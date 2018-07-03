@@ -7,7 +7,7 @@ data class Vector(val x: Float, val y: Float, val z: Float) {
 
     infix fun x(v: Vector) = Vector(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x)
 
-    fun dot(v: Vector) = x * v.x + y * v.y + z * v.z
+    fun dotProduct(v: Vector) = x * v.x + y * v.y + z * v.z
     fun magnitude() = (Math.sqrt(((x * x) + (y * y) + (z * z)).toDouble())).toFloat()
     fun normalize(): Vector {
         val m = magnitude()

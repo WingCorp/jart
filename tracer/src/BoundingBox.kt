@@ -1,6 +1,6 @@
-class BoundingBox(val low: Point, val high: Point) {
+class BoundingBox(val lowPoint: Point, val highPoint: Point) {
 
-    fun hit(r: Ray) : Boolean{
+    fun intersect(ray: Ray) : Boolean{
         val tx: Float
         val ty: Float
         val tz: Float
@@ -8,33 +8,33 @@ class BoundingBox(val low: Point, val high: Point) {
         val dty: Float
         val dtz: Float
 
-        if(r.dir.x >= 0.0){
-            tx = (low.x - r.o.x)/r.dir.x
-            dtx = (high.x - r.o.x)/r.dir.x
+        if(ray.direction.x >= 0.0f){
+            tx = (lowPoint.x - ray.point.x)/ray.direction.x
+            dtx = (highPoint.x - ray.point.x)/ray.direction.x
         } else {
-            tx = (high.x - r.o.x)/r.dir.x
-            dtx = (low.x - r.o.x)/r.dir.x
+            tx = (highPoint.x - ray.point.x)/ray.direction.x
+            dtx = (lowPoint.x - ray.point.x)/ray.direction.x
         }
 
-        if(r.dir.y >= 0.0){
-            ty = (low.y - r.o.y)/r.dir.y
-            dty = (high.y - r.o.y)/r.dir.y
+        if(ray.direction.y >= 0.0f){
+            ty = (lowPoint.y - ray.point.y)/ray.direction.y
+            dty = (highPoint.y - ray.point.y)/ray.direction.y
         } else {
-            ty = (high.y - r.o.y)/r.dir.y
-            dty = (low.y - r.o.y)/r.dir.y
+            ty = (highPoint.y - ray.point.y)/ray.direction.y
+            dty = (lowPoint.y - ray.point.y)/ray.direction.y
         }
 
-        if(r.dir.z >= 0.0){
-            tz = (low.z - r.o.z)/r.dir.z
-            dtz = (high.z - r.o.z)/r.dir.z
+        if(ray.direction.z >= 0.0f){
+            tz = (lowPoint.z - ray.point.z)/ray.direction.z
+            dtz = (highPoint.z - ray.point.z)/ray.direction.z
         } else {
-            tz = (high.z - r.o.z)/r.dir.z
-            dtz = (low.z - r.o.z)/r.dir.z
+            tz = (highPoint.z - ray.point.z)/ray.direction.z
+            dtz = (lowPoint.z - ray.point.z)/ray.direction.z
         }
 
         val t = maxOf(tx, ty, tz)
         val dt = minOf(dtx, dty, dtz)
 
-        return (t < dt && dt > 0.0)
+        return (t < dt && dt > 0.0f)
     }
 }

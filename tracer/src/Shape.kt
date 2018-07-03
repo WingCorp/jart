@@ -1,6 +1,6 @@
 interface Shape{
 
-    fun hit()
+    fun intersect(ray: Ray): Hit?
     fun boundingBox()
-    fun inside()
+    fun inside(point: Point)
 }
