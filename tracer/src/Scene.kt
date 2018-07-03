@@ -1,0 +1,1 @@
+data class Scene(val shapes: List<Shape>)
