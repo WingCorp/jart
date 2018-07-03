@@ -1,4 +1,6 @@
-abstract class Shape(val boundingBox: BoundingBox) {
+abstract class Shape {
+
+    abstract val boundingBox: BoundingBox
 
     abstract fun intersect(ray: Ray): Hit?
 
