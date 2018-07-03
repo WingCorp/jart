@@ -4,6 +4,6 @@ abstract class Shape {
 
     abstract fun intersect(ray: Ray): Hit?
 
-    abstract fun inside(point: Point)
+    abstract fun inside(point: Point) : Boolean
 
 }
