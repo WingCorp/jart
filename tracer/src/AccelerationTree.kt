@@ -1,4 +1,7 @@
-class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) {
+/**
+ * A `AccelarationTree` implementation.
+ */
+class AccelarationTree(shapes: List<Shape>, private val bounds: BoundingBox) {
 
     enum class Axis {
         X,

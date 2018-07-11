@@ -1,7 +1,17 @@
+package Shapes
+
+import BoundingBox
+import Hit
+import Maths
+import Point
+import Ray
+import Vector
 import kotlin.math.min
 
-class Sphere(val center: Point, val radius: Float) : Shape {
-    
+class Sphere(val center: Point, val radius: Float) : Shape() {
+
+    override val boundingBox = BoundingBox(getLow(), getHigh())
+
     private fun getCorrectSolution(t1: Float, t2: Float): Float? {
         return when {
             t1 > 0.0 && t2 < 0.0 -> t1
@@ -37,23 +47,18 @@ class Sphere(val center: Point, val radius: Float) : Shape {
                 if(t == null){
                     null
                 } else {
-                    val normal = Vector(center.x/radius, center.y/radius, center.z/radius).normalize()
+                    val normal = Vector(center.x / radius, center.y / radius, center.z / radius).normalize()
                     Hit(t, normal)
                 }
             }
         }
     }
 
-    fun getLow(){
-        val p = Point((0.0f - radius) + Maths.e(), (0.0f))
-    }
-    override fun boundingBox() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    private fun getLow() = Point((0.0f - radius) - Maths.e(), (0.0f - radius) - Maths.e(), (0.0f - radius) - Maths.e())
 
-    override fun inside(point: Point){
-        return when{
+    private fun getHigh() = Point((0.0f + radius) + Maths.e(), (0.0f + radius) + Maths.e(), (0.0f + radius) + Maths.e())
 
-        }
+    override fun inside(point: Point) : Boolean {
+        return (Maths.pow(point.x - center.x, 2.0f) + Maths.pow(point.y - center.y, 2.0f) + Maths.pow(point.z - center.z, 2.0f)) > Maths.pow(radius, 2.0f)
     }
 }

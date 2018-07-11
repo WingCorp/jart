@@ -1,13 +1,10 @@
-data class PointLight(
-        val point: Point,
+data class DirectionalLight(
+        val direction: Vector,
+        override val intensity: Float,
         override val baseColour: Colour,
-        override val intensity: Float
+        override val geometricFactor: Float,
+        override val probabilityDensity: Float
 ) : Light {
-    override val geometricFactor: Float
-        get() = 1f
-    override val probabilityDensity: Float
-        get() = 1f
-
     override fun direction(p: Point): Vector {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

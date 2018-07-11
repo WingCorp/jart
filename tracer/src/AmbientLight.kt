@@ -1,4 +1,7 @@
-data class AmbientLight(val baseColour: Colour, val intensity: Float) {
+interface AmbientLight {
+    val baseColour: Colour
+    val intensity: Float
     val colour: Colour
         get() = baseColour * intensity
+
 }
