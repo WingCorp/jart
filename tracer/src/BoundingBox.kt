@@ -1,5 +1,7 @@
 class BoundingBox(val lowPoint: Point, val highPoint: Point) {
 
+    val centerPoint = (highPoint + lowPoint) / 2f
+
     fun intersect(ray: Ray): Boolean {
         val tx: Float
         val ty: Float
