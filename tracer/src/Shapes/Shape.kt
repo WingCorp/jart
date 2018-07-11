@@ -1,3 +1,10 @@
+package Shapes
+
+import BoundingBox
+import Hit
+import Point
+import Ray
+
 abstract class Shape {
 
     abstract val boundingBox: BoundingBox

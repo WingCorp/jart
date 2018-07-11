@@ -1,3 +1,11 @@
+package Shapes
+
+import BoundingBox
+import Hit
+import Maths
+import Point
+import Ray
+import Vector
 import kotlin.math.min
 
 class Sphere(val center: Point, val radius: Float) : Shape() {
@@ -39,7 +47,7 @@ class Sphere(val center: Point, val radius: Float) : Shape() {
                 if(t == null){
                     null
                 } else {
-                    val normal = Vector(center.x/radius, center.y/radius, center.z/radius).normalize()
+                    val normal = Vector(center.x / radius, center.y / radius, center.z / radius).normalize()
                     Hit(t, normal)
                 }
             }
