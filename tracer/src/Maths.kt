@@ -1,6 +1,6 @@
 object Maths {
 
-    fun e(): Float{
+    fun e(): Float {
         return 0.00001f
     }
 

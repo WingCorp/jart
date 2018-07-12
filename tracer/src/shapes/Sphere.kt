@@ -1,10 +1,11 @@
-package Shapes
+package shapes
 
 import BoundingBox
 import Hit
 import Maths
 import Point
 import Ray
+import Shape
 import Vector
 import kotlin.math.min
 

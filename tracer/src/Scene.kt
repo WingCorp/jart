@@ -1,1 +1,5 @@
-data class Scene(val shapes: List<Shape>, val lights: List<Light>, val ambientLights: List<SimpleAmbientLight>)
+data class Scene(
+        val shapes: List<Shape>,
+        val lights: List<Light>,
+        val ambientLights: List<SimpleAmbientLight>
+)

@@ -1,16 +1,9 @@
-package Shapes
-
-import BoundingBox
-import Hit
-import Point
-import Ray
-
 abstract class Shape {
 
     abstract val boundingBox: BoundingBox
 
     abstract fun intersect(ray: Ray): Hit?
 
-    abstract fun inside(point: Point) : Boolean
+    abstract fun inside(point: Point): Boolean
 
 }

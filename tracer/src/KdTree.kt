@@ -1,7 +1,7 @@
 /**
- * A `AccelarationTree` implementation.
+ * A KdTree implementation.
  */
-class AccelarationTree(shapes: List<Shape>, private val bounds: BoundingBox) {
+class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) {
 
     enum class Axis {
         X,
@@ -46,8 +46,7 @@ class AccelarationTree(shapes: List<Shape>, private val bounds: BoundingBox) {
             if (targetInLeft) {
                 nearestNode = node.left
                 nearestBounds = leftBounds
-            }
-            else {
+            } else {
                 nearestNode = node.right
                 nearestBounds = rightBounds
             }

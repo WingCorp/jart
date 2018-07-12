@@ -1,9 +1,11 @@
-package Shapes
+package shapes
 
 import Point
 import BoundingBox
 import Ray
 import Hit
+import Shape
+
 class Triangle(val a: Point, val b: Point, val c: Point) : Shape() {
 
     override val boundingBox = BoundingBox(getLow(), getHigh())
