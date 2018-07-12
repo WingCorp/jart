@@ -20,12 +20,12 @@ class Colour(r: Float, g: Float, b: Float) {
         else -> v
     }
 
-    fun merge(c: Colour, refl: Float): Colour {
-        val refl = norm(refl)
-        val reflP = 1.0f - norm(refl) //Reflection percentage
-        val r = refl * r + reflP * c.r
-        val g = refl * g + reflP * c.g
-        val b = refl * b + reflP * c.b
+    fun merge(c: Colour, reflection: Float): Colour {
+        val reflectionN = norm(reflection)
+        val reflectionPercent = 1.0f - norm(reflectionN) //Reflection percentage
+        val r = reflectionN * r + reflectionPercent * c.r
+        val g = reflectionN * g + reflectionPercent * c.g
+        val b = reflectionN * b + reflectionPercent * c.b
         return Colour(r, g, b)
     }
 
