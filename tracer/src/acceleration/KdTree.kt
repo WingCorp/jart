@@ -138,7 +138,7 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox, useSingleSort
             return buildRec(shapes, Axis.X)
         }
 
-        private fun buildMultipleSorts(shapes: List<Shape>, axis: Axis): KdNode? {
+        private tailrec fun buildMultipleSorts(shapes: List<Shape>, axis: Axis): KdNode? {
             if (shapes.isEmpty()) {
                 return null
             }
