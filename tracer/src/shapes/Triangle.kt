@@ -10,7 +10,7 @@ class Triangle(val a: Point, val b: Point, val c: Point) : Shape() {
 
     override val boundingBox = BoundingBox(getLow(), getHigh())
 
-    override fun intersect(ray: Ray): Hit?{
+    override fun intersect(ray: Ray): Hit? {
         val a = this.a.x - this.b.x
         val b = this.a.x - this.c.x
         val c = ray.direction.x
@@ -24,16 +24,22 @@ class Triangle(val a: Point, val b: Point, val c: Point) : Shape() {
         val k = ray.direction.z
         val l = this.a.z - ray.origin.z
 
-        val D = a*(f*k - g*j) + b*(g*i - e*k) + c*(e*j - f*i)
-        if (D != 0.0f){
-            val beta = (d*(f*k - g*k) + b*(g*l - h*k) + c*(h*j - f*l))/D
-            val gamma = (a*(h*k - g*l) + d*(g*i - e*k) + c*(e*l - h*i))/D
-            val t = (a*(f*l - h*j) + b*(h*i - e*l) + d*(e*j - f*i))
-            if(beta > 0.0f && beta < 1.0f && gamma > 0.0f && gamma < 1.0f && beta+gamma > 0.0f && beta+gamma < 1.0f && t > 0.0f){
-                val normal = (this.a.distance(this.b) x this.a.distance(this.c)).normalize()
-                return Hit(t, normal)
-            } else { return null }
-        } else { return null }
+        val D = a * (f * k - g * j) + b * (g * i - e * k) + c * (e * j - f * i)
+
+        if (D == 0.0f) {
+            return null
+        }
+
+        val beta = (d * (f * k - g * k) + b * (g * l - h * k) + c * (h * j - f * l)) / D
+        val gamma = (a * (h * k - g * l) + d * (g * i - e * k) + c * (e * l - h * i)) / D
+        val t = (a * (f * l - h * j) + b * (h * i - e * l) + d * (e * j - f * i))
+
+        return if (beta > 0.0f && beta < 1.0f && gamma > 0.0f && gamma < 1.0f && beta + gamma > 0.0f && beta + gamma < 1.0f && t > 0.0f) {
+            val normal = (this.a.distance(this.b) x this.a.distance(this.c)).normalize()
+            Hit(t, normal)
+        } else {
+            null
+        }
     }
 
     private fun getLow(): Point {
