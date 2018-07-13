@@ -1,3 +1,5 @@
+import basics.Colour
+
 interface AmbientLight {
     val baseColour: Colour
     val intensity: Float

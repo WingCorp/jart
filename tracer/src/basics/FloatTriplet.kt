@@ -1,3 +1,5 @@
+package basics
+
 abstract class FloatTriplet(x: Float, y: Float, z: Float) {
 
     private val values: FloatArray = floatArrayOf(x, y, z)

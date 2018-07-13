@@ -1,10 +1,10 @@
 package shapes
 
-import Point
-import BoundingBox
-import Ray
-import Hit
 import Shape
+import basics.BoundingBox
+import basics.Hit
+import basics.Point
+import basics.Ray
 
 class Triangle(val a: Point, val b: Point, val c: Point) : Shape() {
 
@@ -40,14 +40,14 @@ class Triangle(val a: Point, val b: Point, val c: Point) : Shape() {
         val x = minOf(a.x, b.x, c.x)
         val y = minOf(a.y, b.y, c.y)
         val z = minOf(a.z, b.z, c.z)
-        return Point(x,y,z)
+        return Point(x, y, z)
     }
 
     private fun getHigh(): Point {
         val x = maxOf(a.x, b.x, c.x)
         val y = maxOf(a.y, b.y, c.y)
         val z = maxOf(a.z, b.z, c.z)
-        return Point(x,y,z)
+        return Point(x, y, z)
     }
 
     override fun inside(point: Point): Boolean {

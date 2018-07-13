@@ -1,12 +1,12 @@
 package shapes
 
-import BoundingBox
-import Hit
-import Maths
-import Point
-import Ray
+import basics.BoundingBox
+import basics.Hit
+import util.Maths
+import basics.Point
+import basics.Ray
 import Shape
-import Vector
+import basics.Vector
 import kotlin.math.min
 
 class Sphere(val center: Point, val radius: Float) : Shape() {

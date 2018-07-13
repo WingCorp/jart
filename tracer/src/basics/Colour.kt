@@ -1,6 +1,9 @@
-import Utilities.GAMMA_MY
-import Utilities.GAMMA_Sdec
-import Utilities.GAMMA_Senc
+package basics
+
+import util.Maths
+import util.Misc.GAMMA_MY
+import util.Misc.GAMMA_Sdec
+import util.Misc.GAMMA_Senc
 
 class Colour(r: Float, g: Float, b: Float) {
 
@@ -39,7 +42,7 @@ class Colour(r: Float, g: Float, b: Float) {
     }
 
     operator fun times(i: Float): Colour {
-        return Colour(r*i, g*i, b*i)
+        return Colour(r * i, g * i, b * i)
     }
 
     companion object {

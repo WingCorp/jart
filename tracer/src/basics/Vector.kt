@@ -1,3 +1,7 @@
+package basics
+
+import util.Maths
+
 data class Vector(val x: Float, val y: Float, val z: Float): FloatTriplet(x, y, z) {
 
     operator fun unaryMinus() = Vector(-x, -y, -z)

@@ -1,3 +1,8 @@
+import basics.BoundingBox
+import basics.Hit
+import basics.Point
+import basics.Ray
+
 abstract class Shape {
 
     abstract val boundingBox: BoundingBox

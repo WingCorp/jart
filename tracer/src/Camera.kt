@@ -1,3 +1,6 @@
+import basics.Point
+import basics.Vector
+
 data class Camera(
         val position: Point,
         val lookAt: Point,

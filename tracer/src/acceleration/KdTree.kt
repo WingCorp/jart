@@ -1,15 +1,16 @@
 package acceleration
 
-import BoundingBox
-import Hit
-import Ray
 import Shape
 import Tree
+import basics.BoundingBox
+import basics.Hit
+import basics.Ray
+import java.util.*
 
 /**
  * A acceleration.KdTree implementation.
  */
-class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) : Tree {
+class KdTree(shapes: List<Shape>, private val bounds: BoundingBox, useSingleSort: Boolean = false) : Tree {
 
     class KdNode(
             val shape: Shape,
@@ -23,7 +24,7 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) : Tree {
     private val isEmpty: Boolean
 
     init {
-        rootNode = build(shapes, Axis.X)
+        rootNode = if(useSingleSort) buildSingleSort(shapes) else buildMultipleSorts(shapes, Axis.X)
         isEmpty = rootNode == null
     }
 
@@ -84,7 +85,60 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) : Tree {
             return Pair(leftBounds, rightBounds)
         }
 
-        private fun build(shapes: List<Shape>, axis: Axis): KdNode? {
+        private fun sortByDimension(shapes: List<Shape>, dim: Int) =
+                shapes.sortedWith(Comparator { s1, s2 ->
+                    s1.boundingBox.centerPoint[dim]
+                            .compareTo(s2.boundingBox.centerPoint[dim])
+                })
+
+        private fun buildSingleSort(shapes: List<Shape>): KdNode? {
+
+            val sortedByX = sortByDimension(shapes, Axis.X.dim)
+
+            val sortedByY = sortByDimension(shapes, Axis.Y.dim)
+
+            val sortedByZ = sortByDimension(shapes, Axis.Z.dim)
+
+            val shapesByDimension = arrayOf(sortedByX, sortedByY, sortedByZ)
+
+            tailrec fun buildRec(shapes: List<Shape>, axis: Axis): KdNode? {
+
+                if (shapes.isEmpty()) {
+                    return null
+                }
+                if (shapes.size == 1) {
+                    return KdNode(shapes.single(), axis, null, null)
+                }
+
+                val sortedShapes = shapesByDimension[axis.dim].intersect(shapes).toList()
+
+                val pHalf = sortedShapes.size / 2
+
+                val nextAxis = axis.up()
+                return when {
+                    sortedShapes.size == 2 -> {
+                        KdNode(
+                                sortedShapes.last(),
+                                axis,
+                                buildRec(listOf(sortedShapes.first()), nextAxis),
+                                null
+                        )
+                    }
+                    else -> {
+                        KdNode(
+                                sortedShapes[pHalf],
+                                axis,
+                                buildRec(sortedShapes.subList(0, pHalf), nextAxis),
+                                buildRec(sortedShapes.subList(pHalf + 1, sortedShapes.size), nextAxis)
+                        )
+                    }
+                }
+            }
+
+            return buildRec(shapes, Axis.X)
+        }
+
+        private fun buildMultipleSorts(shapes: List<Shape>, axis: Axis): KdNode? {
             if (shapes.isEmpty()) {
                 return null
             }
@@ -103,7 +157,7 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) : Tree {
                     KdNode(
                             sortedShapes.last(),
                             axis,
-                            build(listOf(sortedShapes.first()), nextAxis),
+                            buildMultipleSorts(listOf(sortedShapes.first()), nextAxis),
                             null
                     )
                 }
@@ -111,8 +165,8 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) : Tree {
                     KdNode(
                             sortedShapes[pHalf],
                             axis,
-                            build(sortedShapes.subList(0, pHalf), nextAxis),
-                            build(sortedShapes.subList(pHalf + 1, sortedShapes.size), nextAxis)
+                            buildMultipleSorts(sortedShapes.subList(0, pHalf), nextAxis),
+                            buildMultipleSorts(sortedShapes.subList(pHalf + 1, sortedShapes.size), nextAxis)
                     )
                 }
             }

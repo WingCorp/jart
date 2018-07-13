@@ -1,3 +1,5 @@
+package basics
+
 data class Point(val x: Float, val y: Float, val z: Float): FloatTriplet(x, y, z) {
 
     operator fun unaryMinus() = Point(-x, -y, -z)
@@ -7,6 +9,8 @@ data class Point(val x: Float, val y: Float, val z: Float): FloatTriplet(x, y, z
     operator fun plus(p: Point) = Point(x + p.x, y + p.y, z + p.z)
 
     operator fun div(f: Float) = Point(x / f, y / f, z / f)
+
+    operator fun times(f: Float) = Point(x * f, y * f, z * f)
 
     fun move(v: Vector) = Point(v.x + x, v.y + y, v.z + z)
 

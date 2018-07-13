@@ -1,3 +1,7 @@
+import basics.Colour
+import basics.Point
+import basics.Vector
+
 interface Light {
     val intensity: Float
     val baseColour: Colour

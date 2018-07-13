@@ -1,3 +1,6 @@
+package util
+
+import basics.Colour
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -5,11 +8,11 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Jon on 21-07-2017.
  */
-object Utilities {
+object Misc {
     //Standard background color
     val BG_COLOR: Colour = Colour.BLACK
 
-    //Material Utilities
+    //Material util.Misc
     val DEF_MAT_COLOR: Colour = Colour.WHITE
 
     val DEF_MAT_REFL = 0.0f

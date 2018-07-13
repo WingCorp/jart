@@ -1,3 +1,10 @@
+package lights
+
+import basics.Colour
+import Light
+import basics.Point
+import basics.Vector
+
 data class DirectionalLight(
         val direction: Vector,
         override val intensity: Float,

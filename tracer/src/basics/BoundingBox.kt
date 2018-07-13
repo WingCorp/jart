@@ -1,3 +1,5 @@
+package basics
+
 class BoundingBox(val lowPoint: Point, val highPoint: Point) {
 
     val centerPoint = (highPoint + lowPoint) / 2f
