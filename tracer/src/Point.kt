@@ -1,4 +1,4 @@
-data class Point(val x: Float, val y: Float, val z: Float) {
+data class Point(val x: Float, val y: Float, val z: Float): FloatTriplet(x, y, z) {
 
     operator fun unaryMinus() = Point(-x, -y, -z)
 
@@ -14,4 +14,13 @@ data class Point(val x: Float, val y: Float, val z: Float) {
 
     fun direction(p: Point) = distance(p).normalize()
 
+    override fun immutableSet(index: Int, value: Float): Point {
+        return when (index) {
+            0 -> Point(value, y, z)
+            1 -> Point(x, value, z)
+            2 -> Point(x, y, value)
+            else -> error("Cannot create immutableSet with modified value at index: $index," +
+                    "index must be within [0;2].")
+        }
+    }
 }

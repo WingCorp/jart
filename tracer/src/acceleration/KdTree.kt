@@ -1,13 +1,15 @@
-/**
- * A KdTree implementation.
- */
-class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) {
+package acceleration
 
-    enum class Axis {
-        X,
-        Y,
-        Z
-    }
+import BoundingBox
+import Hit
+import Ray
+import Shape
+import Tree
+
+/**
+ * A acceleration.KdTree implementation.
+ */
+class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) : Tree {
 
     class KdNode(
             val shape: Shape,
@@ -18,14 +20,26 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) {
 
     private val rootNode: KdNode?
 
-    val isEmpty: Boolean
+    private val isEmpty: Boolean
 
     init {
         rootNode = build(shapes, Axis.X)
         isEmpty = rootNode == null
     }
 
-    fun intersect(ray: Ray): Hit? {
+    fun size(): Int {
+
+        fun sizeRec(node: KdNode?, count: Int): Int {
+
+            if (node == null) return@sizeRec count
+
+            return sizeRec(node.right, sizeRec(node.left, count + 1))
+        }
+
+        return sizeRec(rootNode, 0)
+    }
+
+    override fun intersect(ray: Ray): Hit? {
 
         if (isEmpty) return null
         var nodesVisited = 0
@@ -60,48 +74,17 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) {
 
     companion object {
 
-        private fun nextAxis(axis: Axis): Axis =
-                when (axis) {
-                    Axis.X -> Axis.Y
-                    Axis.Y -> Axis.Z
-                    Axis.Z -> Axis.X
-                }
-
-        private fun comparePointByAxis(axis: Axis) = { p: Point, q: Point ->
-            when (axis) {
-                Axis.X -> p.x.compareTo(q.x)
-                Axis.Y -> p.y.compareTo(q.y)
-                Axis.Z -> p.z.compareTo(q.z)
-            }
-        }
-
-        private fun getPointValByAxis(point: Point, axis: Axis): Float {
-            return when (axis) {
-                Axis.X -> point.x
-                Axis.Y -> point.y
-                Axis.Z -> point.z
-            }
-        }
-
-        private fun makePivotByAxis(point: Point, pivot: Float, axis: Axis): Point {
-            return when (axis) {
-                Axis.X -> Point(pivot, point.y, point.z)
-                Axis.Y -> Point(point.x, pivot, point.z)
-                Axis.Z -> Point(point.x, point.y, pivot)
-            }
-        }
-
         private fun divideBounds(shape: Shape, boundingBox: BoundingBox, axis: Axis): Pair<BoundingBox, BoundingBox> {
-            val maxVal = getPointValByAxis(shape.boundingBox.highPoint, axis)
-            val minVal = getPointValByAxis(shape.boundingBox.lowPoint, axis)
-            val leftPivot = makePivotByAxis(boundingBox.highPoint, maxVal, axis)
-            val rightPivot = makePivotByAxis(boundingBox.lowPoint, minVal, axis)
+            val maxVal = shape.boundingBox.highPoint[axis.dim]
+            val minVal = shape.boundingBox.lowPoint[axis.dim]
+            val leftPivot = boundingBox.highPoint.immutableSet(axis.dim, maxVal)
+            val rightPivot = boundingBox.lowPoint.immutableSet(axis.dim, minVal)
             val leftBounds = BoundingBox(boundingBox.lowPoint, leftPivot)
             val rightBounds = BoundingBox(rightPivot, boundingBox.highPoint)
             return Pair(leftBounds, rightBounds)
         }
 
-        fun build(shapes: List<Shape>, axis: Axis): KdNode? {
+        private fun build(shapes: List<Shape>, axis: Axis): KdNode? {
             if (shapes.isEmpty()) {
                 return null
             }
@@ -109,11 +92,12 @@ class KdTree(shapes: List<Shape>, private val bounds: BoundingBox) {
                 return KdNode(shapes.single(), axis, null, null)
             }
             val sortedShapes = shapes.sortedWith(Comparator { s1, s2 ->
-                comparePointByAxis(axis)
-                        .invoke(s1.boundingBox.centerPoint, s2.boundingBox.centerPoint)
+                s1.boundingBox.centerPoint[axis.dim]
+                        .compareTo(s2.boundingBox.centerPoint[axis.dim])
             })
             val pHalf = sortedShapes.size / 2
-            val nextAxis = nextAxis(axis)
+
+            val nextAxis = axis.up()
             return when {
                 sortedShapes.size == 2 -> {
                     KdNode(

@@ -1,4 +1,4 @@
-data class Vector(val x: Float, val y: Float, val z: Float) {
+data class Vector(val x: Float, val y: Float, val z: Float): FloatTriplet(x, y, z) {
 
     operator fun unaryMinus() = Vector(-x, -y, -z)
 
@@ -19,5 +19,15 @@ data class Vector(val x: Float, val y: Float, val z: Float) {
     fun normalize(): Vector {
         val m = magnitude()
         return Vector(x / m, y / m, z / m)
+    }
+
+    override fun immutableSet(index: Int, value: Float): Vector {
+        return when (index) {
+            0 -> Vector(value, y, z)
+            1 -> Vector(x, value, z)
+            2 -> Vector(x, y, value)
+            else -> error("Cannot create immutableSet with modified value at index: $index," +
+                    "index must be within [0;2].")
+        }
     }
 }
