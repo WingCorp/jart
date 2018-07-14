@@ -26,11 +26,9 @@ class Triangle(val a: Point, val b: Point, val c: Point) : Shape() {
 
         val D = a * (f * k - g * j) + b * (g * i - e * k) + c * (e * j - f * i)
 
-        if (D == 0.0f) {
-            return null
-        }
+        if (D == 0.0f) return null
 
-        val beta = (d * (f * k - g * k) + b * (g * l - h * k) + c * (h * j - f * l)) / D
+        val beta = (d * (f * k - g * j) + b * (g * l - h * k) + c * (h * j - f * l)) / D
         val gamma = (a * (h * k - g * l) + d * (g * i - e * k) + c * (e * l - h * i)) / D
         val t = (a * (f * l - h * j) + b * (h * i - e * l) + d * (e * j - f * i))
 
