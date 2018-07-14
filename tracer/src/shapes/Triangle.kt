@@ -30,7 +30,7 @@ class Triangle(val a: Point, val b: Point, val c: Point) : Shape() {
 
         val beta = (d * (f * k - g * j) + b * (g * l - h * k) + c * (h * j - f * l)) / D
         val gamma = (a * (h * k - g * l) + d * (g * i - e * k) + c * (e * l - h * i)) / D
-        val t = (a * (f * l - h * j) + b * (h * i - e * l) + d * (e * j - f * i))
+        val t = (a * (f * l - h * j) + b * (h * i - e * l) + d * (e * j - f * i)) / D
 
         return if (beta > 0.0f && beta < 1.0f && gamma > 0.0f && gamma < 1.0f && beta + gamma > 0.0f && beta + gamma < 1.0f && t > 0.0f) {
             val normal = (this.a.distance(this.b) x this.a.distance(this.c)).normalize()
