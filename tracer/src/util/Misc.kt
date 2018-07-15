@@ -9,6 +9,9 @@ import java.util.concurrent.TimeUnit
  * Created by Jon on 21-07-2017.
  */
 object Misc {
+
+    fun<T> id(it: T): T = it
+
     //Standard background color
     val BG_COLOR: Colour = Colour.BLACK
 
