@@ -4,6 +4,7 @@ import basics.Colour
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.math.min
 
 /**
  * Created by Jon on 21-07-2017.
@@ -51,5 +52,14 @@ object Misc {
 
     fun floatEquals(a: Float, b: Float, tolerance: Float = SMALL_NUM2): Boolean {
         return Math.abs(a - b) < tolerance
+    }
+
+    fun <T1, T2, R> Collection<T1>.fold2(otherCollection: Collection<T2>, initial: R, folder: (R, T1, T2) -> R): R {
+        val smallestSize = min(this.size, otherCollection.size)
+        var currentState = initial
+        for (i in (0..smallestSize)) {
+            currentState = folder(currentState, this.elementAt(i), otherCollection.elementAt(i))
+        }
+        return currentState
     }
 }

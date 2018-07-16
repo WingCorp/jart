@@ -1,5 +1,6 @@
 package acceleration
 
+import Shape
 import basics.BoundingBox
 import basics.Point
 import basics.Ray
@@ -9,8 +10,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import shapes.Triangle
 import util.Stopwatch
-import java.io.File
 import java.util.*
+import kotlin.test.assertNotNull
 
 class KdTreeTest {
 
@@ -33,42 +34,57 @@ class KdTreeTest {
 
     private val random = Random()
 
-    private fun randomCenter(): Point =
+    private fun randomPoint(): Point =
             Point(random.nextFloat() * 100f, random.nextFloat() * 100f, random.nextFloat() * 100f)
+
+    private fun randomVector(): Vector =
+            Vector(random.nextFloat() * 100f, random.nextFloat() * 100f, random.nextFloat() * 100f)
+
+    private fun determineBounds(shapes: Collection<Shape>): BoundingBox {
+        val initialBounds = BoundingBox(
+                Point(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
+                Point(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
+        )
+        return shapes.fold(initialBounds) { acc, shape ->
+            val accMin = acc.lowPoint
+            val accMax = acc.highPoint
+
+            val min = shape.boundingBox.lowPoint
+            val max = shape.boundingBox.highPoint
+
+            var outMin = accMin
+            var outMax = accMax
+
+            for (dim in 0..2) {
+                if (min[dim] < accMin[dim]) {
+                    outMin = outMin.immutableSet(dim, min[dim])
+                }
+                if (max[dim] > accMax[dim]) {
+                    outMax = outMax.immutableSet(dim, max[dim])
+                }
+            }
+            return@fold BoundingBox(outMin, outMax)
+        }
+    }
+
+    private fun generatePyramids(i: Int): Pair<List<Triangle>, BoundingBox> {
+        val pyramids = Array(i) {
+            makePyramid(random.nextFloat(), randomPoint())
+        }.toList().flatten()
+        return Pair(
+                pyramids,
+                determineBounds(pyramids)
+        )
+    }
 
     @Test
     fun buildFromShapesTest() {
 
-        val pyramids = Array(18000) {
-            makePyramid(random.nextFloat(), randomCenter())
-        }.toList().flatten()
-
-        val bounds = BoundingBox(Point(-500f, -500f, -500f), Point(500f, 500f, 500f))
+        val (pyramids, bounds) = generatePyramids(20000)
 
         val tree = KdTree(pyramids, bounds)
 
         assertEquals(pyramids.size, tree.size())
-    }
-
-    @Test
-    fun drawSplitsTest() {
-        val pyramids = Array(18000) {
-            makePyramid(random.nextFloat(), randomCenter())
-        }.toList().flatten()
-
-        val bounds = BoundingBox(Point(-500f, -500f, -500f), Point(500f, 500f, 500f))
-
-        val tree = KdTree(pyramids, bounds)
-
-        tree.drawSplits("./testSplits.png")
-
-        val xFile = File("./testSplitsX.png")
-
-        val yFile = File("./testSplitsY.png")
-
-        val zFile = File("./testSplitsZ.png")
-
-        assertTrue(xFile.exists() && yFile.exists() && zFile.exists())
     }
 
     @Test
@@ -80,21 +96,42 @@ class KdTreeTest {
 
         assertTrue(intersects)
 
-        val pyramids = Array(18000) {
-            makePyramid(random.nextFloat(), randomCenter())
-        }.toList().flatten()
-
-        val bounds = BoundingBox(Point(-500f, -500f, -500f), Point(500f, 500f, 500f))
+        val (pyramids, bounds) = generatePyramids(40000)
 
         val stopwatch = Stopwatch()
 
-        val tree = KdTree(pyramids, bounds)
+        val tree = KdTree(pyramids + target, bounds)
 
         val buildTime = stopwatch.elapsedTime()
         println("Constructing KdTree for ${pyramids.size} triangles took $buildTime seconds.")
 
-        val kdHit = tree.intersect(ray)
+        val intersectWatch = Stopwatch()
+        val hit = tree.intersect(ray)
+        println("Intersecting KdTree with one ray took ${intersectWatch.elapsedTime()} seconds.")
 
-        assertTrue(kdHit != null)
+        assertNotNull(hit)
+    }
+
+    @Test
+    fun testManyIntersects() {
+        val rays = Array(1024 * 512) {
+            Ray(randomPoint(), randomVector())
+        }
+
+        val (pyramids, bounds) = generatePyramids(250000)
+
+        val buildWatch = Stopwatch()
+        val tree = KdTree(pyramids, bounds)
+        val buildTime = buildWatch.elapsedTime()
+
+        println("Constructed kdtree for ${pyramids.size} triangles in $buildTime")
+
+        val intersectWatch = Stopwatch()
+        for (ray in rays) {
+            tree.intersect(ray)
+        }
+        val intersectTime = intersectWatch.elapsedTime()
+
+        println("Intersected ${rays.size} rays in $intersectTime")
     }
 }
